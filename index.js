@@ -1,4 +1,6 @@
-import { Client, GatewayIntentBits, Partials } from "discord.js";
+import { Client, Collection, GatewayIntentBits, Partials } from "discord.js";
+import loadCommands from "./functions/loadCommands.js";
+import loadEvents from "./functions/loadEvents.js";
 import config from "./config/index.js";
 
 const client = new Client({
@@ -6,12 +8,15 @@ const client = new Client({
   partials: [Object.keys(Partials)],
 });
 
+client.commands = new Collection();
+client.events = new Collection();
 client.setMaxListeners(0);
 
 client
   .login(config.discordToken)
-  .then(() => {
-    console.log(`Logged whith ${client.user.username}`);
+  .then(async () => {
+    await loadEvents(client);
+    await loadCommands(client);
   })
   .catch((err) => {
     console.error(err);
