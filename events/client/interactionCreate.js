@@ -9,7 +9,7 @@ const cooldown = new Set();
 
 export default {
   name: "InteractionCreate",
-  once: true,
+  once: false,
   /**
    *
    * @param {ChatInputCommandInteraction} interaction

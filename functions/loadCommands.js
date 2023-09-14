@@ -5,27 +5,34 @@ async function loadCommands(client) {
   const table = new AsciiTable("Commands").setHeading("Command", "Status");
   await client.commands.clear();
 
-  const commandFolder = fs.readdirSync("../commands");
+  const commandFolder = fs.readdirSync("./commands");
 
   const commandsArray = [];
 
   for (const folder of commandFolder) {
     const commandFiles = fs
-      .readdirSync(`../commands/${folder}`)
+      .readdirSync(`./commands/${folder}`)
       .filter((file) => file.endsWith(".js"));
 
     for (const file of commandFiles) {
       const commandFile = await import(`../commands/${folder}/${file}`);
 
-      const properties = { folder, ...commandFile };
+      const command = commandFile.default;
 
-      client.commands.set(commandFile.data.name, properties);
-
-      if (commandFile.data.name) {
-        commandsArray.push(commandFile.data.toJSON());
-        table.addRow(file, "✅".green);
+      if ("data" in command && "execute" in command) {
+        const properties = { folder, ...command };
+        client.commands.set(command.data.name, properties);
       } else {
-        table.addRow(file, "❌".red);
+        console.log(
+          `[WARNING] The command at ../commands/${folder}/${file} is missing a required "data" or "execute" property.`
+        );
+      }
+
+      if (command.data.name) {
+        commandsArray.push(command.data.toJSON());
+        table.addRow(file, "Loaded");
+      } else {
+        table.addRow(file, "Not loaded");
         continue;
       }
     }
