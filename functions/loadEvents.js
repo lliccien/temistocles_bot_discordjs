@@ -5,11 +5,11 @@ async function loadEvents(client) {
   const table = new AsciiTable("Events Handler").setHeading("Events", "Status");
   await client.events.clear();
 
-  const eventFolder = fs.readdirSync("../events");
+  const eventFolder = fs.readdirSync("./events");
 
   for (const folder of eventFolder) {
     const eventFiles = fs
-      .readdirSync(`../events/${folder}`)
+      .readdirSync(`./events/${folder}`)
       .filter((file) => file.endsWith(".js"));
 
     for (const file of eventFiles) {
@@ -36,9 +36,9 @@ async function loadEvents(client) {
       }
 
       if (file) {
-        table.addRow(file, "✅".green);
+        table.addRow(file, "Loaded");
       } else {
-        table.addRow(file, "❌".red);
+        table.addRow(file, "Not loaded");
         continue;
       }
     }
