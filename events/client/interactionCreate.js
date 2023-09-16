@@ -8,7 +8,7 @@ import {
 const cooldown = new Set();
 
 export default {
-  name: "InteractionCreate",
+  name: "interactionCreate",
   once: false,
   /**
    *
