@@ -14,25 +14,20 @@ async function loadEvents(client) {
 
     for (const file of eventFiles) {
       const eventFile = await import(`../events/${folder}/${file}`);
-
-      if (eventFile.rest) {
-        if (eventFile.once)
-          client.rest.once(eventFile.name, (...args) =>
-            eventFile.execute(...args, client)
+      const event = eventFile.default;
+      if (event.rest) {
+        if (event.once)
+          client.rest.once(event.name, (...args) =>
+            event.execute(...args, client)
           );
         else
-          client.rest.on(eventFile.name, (...args) =>
-            eventFile.execute(...args, client)
+          client.rest.on(event.name, (...args) =>
+            event.execute(...args, client)
           );
       } else {
-        if (eventFile.once)
-          client.once(eventFile.name, (...args) =>
-            eventFile.execute(...args, client)
-          );
-        else
-          client.on(eventFile.name, (...args) =>
-            eventFile.execute(...args, client)
-          );
+        if (event.once)
+          client.once(event.name, (...args) => event.execute(...args, client));
+        else client.on(event.name, (...args) => event.execute(...args, client));
       }
 
       if (file) {
