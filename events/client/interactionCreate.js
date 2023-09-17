@@ -39,6 +39,7 @@ export default {
         setTimeout(() => {
           cooldown.delete(interaction.user.id);
         }, cooldowns * 1000);
+        command.execute(interaction, client);
       } catch (error) {
         return interaction.reply({
           content: `There was an error executing this command: ${error}`,
