@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "start": "nodemon index.js",
-    "lint": "npx eslint src test",
+    "lint": "npx eslint .",
     "lint:fix": "npm run lint -- --fix",
     "format": "npm run prettier:fix && npm run lint:fix",
     "commit": "cz"
